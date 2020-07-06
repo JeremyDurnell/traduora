@@ -26,10 +26,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - traduora.dallasdstb.com
+      - traduoratest.dallasdstb.com
       secretName: traduora-tls
   rules:
-  - host: traduora.dallasdstb.com  # Replace with your desired DNS record
+  - host: traduoratest.dallasdstb.com  # Replace with your desired DNS record
     http:
       paths:
         - path: /

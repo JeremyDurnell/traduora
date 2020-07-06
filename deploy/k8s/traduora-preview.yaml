@@ -25,7 +25,7 @@ spec:
 
 
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traduora
@@ -103,7 +103,7 @@ data:
   TR_PORT: "8080"
   TR_AUTH_TOKEN_EXPIRE: "8600"
   TR_DB_DATABASE: "traduora_preview"
-  TR_DB_HOST: "traduora-mysqldb"
+  TR_DB_HOST: "localhost"
   TR_DB_PORT: "3306"
   TR_DB_USER: "root"
   TR_MAIL_DEBUG: "false"

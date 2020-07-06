@@ -1,0 +1,79 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: traduora-back
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: traduora-back
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: traduora-back
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_DATABASE
+          value: "tr_dev"
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traduora-back
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: traduora-back
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: traduora-front
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: traduora-front
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: traduora-front
+        image: traduora/traduora:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: TR_DB_HOST
+          value: "mysqldb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traduora-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: traduora-front
